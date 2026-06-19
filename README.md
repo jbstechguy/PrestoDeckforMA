@@ -66,6 +66,7 @@ This fork also adds native Home Assistant integration, allowing PrestoDeck to fu
 - Added Home Assistant MQTT Discovery
 - Added Home Assistant Integration for display, LEDs, and brightness control
 - Added automatic MQTT reconnection and recovery
+- Improved overall performance and touchscreen responsiveness by replacing Spotify API polling with MQTT-based communication
 
 
 ## Prerequisites
