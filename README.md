@@ -37,10 +37,10 @@ This fork also adds native Home Assistant integration, allowing PrestoDeck to fu
 - Automatic MQTT reconnection and recovery after connection loss
 
 <p align="center">
-  <img src="./docs/presto2.jpg" width="220" />
   <img src="./docs/presto3.jpg" width="220" />
   <img src="./docs/presto4.jpg" width="220" />
   <img src="./docs/presto5.jpg" width="220" />
+  <img src="./docs/presto2.jpg" width="220" />
 </p>
 
 <p align="center">
