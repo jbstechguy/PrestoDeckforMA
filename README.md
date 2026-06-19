@@ -23,7 +23,9 @@ This fork also adds native Home Assistant integration, allowing PrestoDeck to fu
   - Mode 1 (Default): Displays album artwork with track title and artist at the bottom of the screen. Tap screen to toggle between Mode 1 and Mode 2.
   - Mode 2: Displays playback controls, track title, and artist information. Tap screen to toggle between Mode 2 and Mode 1.
   - Mode 3: Displays only album artwork for a clean now-playing experience. Long press to Enter Mode 3, tap to return to Mode 1.
-- Touch-to-wake support
+- Display power control
+  - Tap the X button in Mode 2 to turn the display off
+  - Tap-to-wake: While the display is off, tap anywhere on the screen to wake it
 - Auto wake when playback starts (recommended to disable this feature in `musicassistant.py` file if you prefer managing power states through Home Assistant automations)
 - Auto sleep after 5 minutes of inactivity (recommended to disable this feature in `musicassistant.py` file if you prefer managing power states through Home Assistant automations)
 - Home Assistant MQTT Discovery and Integration
@@ -44,12 +46,19 @@ This fork also adds native Home Assistant integration, allowing PrestoDeck to fu
 </p>
 
 <p align="center">
-  <em>
-    🎥 <a href="https://1drv.ms/v/c/4a7516bd91a697de/IQAJGoF-6F_3TJffCg0RI-RWAXN46W10rvfTC2IUkFn4tVs?e=HPrmrF">
-      Click here to watch a quick demo video
-    </a>
-  </em>
+  <strong>🎥 <a href="https://1drv.ms/v/c/4a7516bd91a697de/IQAJGoF-6F_3TJffCg0RI-RWAXN46W10rvfTC2IUkFn4tVs?e=HPrmrF">Watch PrestoDeck for Music Assistant in Action</a></strong>
 </p>
+
+## What's Changed in This Fork?
+
+- Replaced Spotify Web API integration with Music Assistant
+- Added Home Assistant MQTT integration
+- Added MQTT Discovery support
+- Added Home Assistant entities for display, LEDs, and brightness
+- Added scrolling text for long track titles
+- Added improved Unicode character support
+- Added automatic MQTT reconnection and recovery
+- Updated branding and UI colors to match Music Assistant and Home Assistant
 
 ## Prerequisites
 
@@ -81,19 +90,19 @@ Before installing PrestoDeck for Music Assistant, ensure the following services 
 
 Follow these steps to install and set up the project on your Presto. You can also follow the [original demo/tutorial video](https://youtu.be/iOz5XUVkFkY), but be sure to skip any steps related to Spotify integration, Spotify authentication, or Spotify API key generation, as this fork uses Music Assistant, Home Assistant, and MQTT instead. 
 
-**Tip:** Don't let the number of steps discourage you—if you've already completed the prerequisites, the entire setup should take less than 10-20 minutes depending on your tech-savviness. Most of the work consists of creating two Home Assistant automations and copying a few files to your Presto.
+**Tip:** Don't let the number of steps discourage you—if you've already completed the prerequisites, the entire setup should take about 10-20 minutes depending on your tech-savviness. Most of the work consists of creating two Home Assistant automations and copying a few files to your Presto.
 
 ### 1. Create Two Automations in Home Assistant
 Before proceeding, make sure you have reviewed the **Music Assistant Player Selection** section in the prerequisites. Once you have selected and verified the Music Assistant media player you want PrestoDeck to control, you can continue with the creation of the required Home Assistant automations.
 
 #### Automation 1 - Publish Music Assistant State
-Copy and paste the following automation into Home Assistant and replace YOURMEDIAPLAYER with your media player entity from Music Assistant:
-```bash
+Copy and paste the following automation into Home Assistant and replace `YOURMEDIAPLAYER` with your media player entity from Music Assistant:
+```yaml
 alias: Presto Deck - Publish Music Assistant State
 description: Send now-playing data to Presto Deck over MQTT
 triggers:
   - trigger: state
-    entity_id: YOURMEDIAPLAYER
+    entity_id: media_player.YOURMEDIAPLAYER
 conditions: []
 actions:
   - delay:
@@ -108,16 +117,16 @@ actions:
       payload: |
         {{
           {
-            "id": states('YOURMEDIAPLAYER') ~ "-" ~
-                  (state_attr('YOURMEDIAPLAYER', 'media_title') or "") ~ "-" ~
-                  (state_attr('YOURMEDIAPLAYER', 'media_artist') or ""),
-            "title": state_attr('YOURMEDIAPLAYER', 'media_title') or "Unknown Track",
-            "artist": state_attr('YOURMEDIAPLAYER', 'media_artist') or "Unknown Artist",
-            "album": state_attr('YOURMEDIAPLAYER', 'media_album_name') or "",
-            "playing": is_state('YOURMEDIAPLAYER', 'playing'),
-            "shuffle": state_attr('YOURMEDIAPLAYER', 'shuffle') or false,
+            "id": states('media_player.YOURMEDIAPLAYER') ~ "-" ~
+                  (state_attr('media_player.YOURMEDIAPLAYER', 'media_title') or "") ~ "-" ~
+                  (state_attr('media_player.YOURMEDIAPLAYER', 'media_artist') or ""),
+            "title": state_attr('media_player.YOURMEDIAPLAYER', 'media_title') or "Unknown Track",
+            "artist": state_attr('media_player.YOURMEDIAPLAYER', 'media_artist') or "Unknown Artist",
+            "album": state_attr('media_player.YOURMEDIAPLAYER', 'media_album_name') or "",
+            "playing": is_state('media_player.YOURMEDIAPLAYER', 'playing'),
+            "shuffle": state_attr('media_player.YOURMEDIAPLAYER', 'shuffle') or false,
             "repeat": false,
-            "image": state_attr('YOURMEDIAPLAYER', 'entity_picture') or ""
+            "image": state_attr('media_player.YOURMEDIAPLAYER', 'entity_picture') or ""
           } | tojson
         }}
 mode: restart
@@ -125,9 +134,9 @@ mode: restart
 
 #### Automation 2 - Receive PrestoDeck Commands
 
-Copy and paste the following automation into Home Assistant, then replace `YOURMEDIAPLAYER` with the Music Assistant media player entity you want PrestoDeck to control. 
+Copy and paste the following automation into Home Assistant and replace `YOURMEDIAPLAYER` with your media player entity from Music Assistant:
 
-```bash
+```yaml
 alias: Presto Deck - Music Assistant Commands
 description: Receive Presto Deck MQTT commands and control media player
 triggers:
@@ -137,7 +146,7 @@ conditions: []
 actions:
   - variables:
       command: "{{ trigger.topic.split('/')[-1] }}"
-      player: YOURMEDIAPLAYER
+      player: media_player.YOURMEDIAPLAYER
   - choose:
       - conditions:
           - condition: template
@@ -268,15 +277,7 @@ if (
 - [MQTT Integration for Home Assistant](https://www.home-assistant.io/integrations/mqtt/)
 - [Mosquitto MQTT Broker](https://mosquitto.org/)
 
-Pimoroni Presto GitHub Repository
-Getting Started with Pimoroni Presto
-
-Music Assistant Documentation
-
-
-
 ## Sponsoring
-
 This project is a fork of the original PrestoDeck created by AkzDev. If you enjoy PrestoDeck, please consider supporting the original creator first, as this project would not exist without their work and inspiration.
 
 <p align="center">
