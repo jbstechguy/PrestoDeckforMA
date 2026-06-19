@@ -13,8 +13,8 @@ This fork also adds native Home Assistant integration, allowing PrestoDeck to fu
 
 - Album artwork display
 - Track title and artist information
-  - Full Unicode character support for accented non-English characters (á, é, í, ó, ú, ñ, ü)
   - Scrolling text for long track titles
+  - Unicode support for accented non-English characters (á, é, í, ó, ú, ñ, ü)
 - Play/Pause control
 - Previous/Next track control
 - Shuffle control
@@ -24,18 +24,14 @@ This fork also adds native Home Assistant integration, allowing PrestoDeck to fu
   - Mode 2: Displays playback controls, track title, and artist information. Tap screen to toggle between Mode 2 and Mode 1.
   - Mode 3: Displays only album artwork for a clean now-playing experience. Long press to Enter Mode 3, tap to return to Mode 1.
 - Display power control
-  - Tap the X button in Mode 2 to turn the display off
-  - Tap-to-wake: While the display is off, tap anywhere on the screen to wake it
-- Auto wake when playback starts (recommended to disable this feature in `musicassistant.py` file if you prefer managing power states through Home Assistant automations)
-- Auto sleep after 5 minutes of inactivity (recommended to disable this feature in `musicassistant.py` file if you prefer managing power states through Home Assistant automations)
+  - Auto wake when playback starts
+  - Auto sleep after 5 minutes of inactivity
+  - Manual display on/off control with tap-to-wake support 
 - Home Assistant MQTT Discovery and Integration
   - Remote display control
   - Remote LED control
   - Remote brightness control
   - Compatible with Home Assistant automations and scenes
-- Updated branding and color scheme
-  - Replaced Spotify branding from original fork with Music Assistant branding
-  - Updated accent colors from Spotify green to Home Assistant blue
 - Automatic MQTT reconnection and recovery after connection loss
 
 <p align="center">
@@ -52,13 +48,23 @@ This fork also adds native Home Assistant integration, allowing PrestoDeck to fu
 ## What's Changed in This Fork?
 
 - Replaced Spotify Web API integration with Music Assistant
-- Added Home Assistant MQTT integration
-- Added MQTT Discovery support
-- Added Home Assistant entities for display, LEDs, and brightness
-- Added scrolling text for long track titles
-- Added improved Unicode character support
-- Added automatic MQTT reconnection and recovery
 - Updated branding and UI colors to match Music Assistant and Home Assistant
+- Updated the existing display modes
+  - Mode 1: Album artwork with track title and artist information displayed at the bottom of the screen, eliminating the unused space that previously appeared beneath the text
+  - Mode 2: Playback controls with track title and artist information repositioned above the controls for improved visibility (as originally designed)
+  - Mode 3: Album artwork only
+  - Mode 1 is now the default startup view instead of Mode 3
+- Added scrolling text for long track titles
+- Added improved Unicode character support for accented non-English characters (á, é, í, ó, ú, ñ, ü)
+- Added automatic sleep mode after 5 minutes of inactivity
+- Added automatic wake when music playback starts
+- Added manual display power controls
+  - In Mode 2, tap the X button to turn the display off
+  - When the display is off, tap anywhere on the screen to wake it
+- Added Home Assistant MQTT Discovery
+- Added Home Assistant Integration for display, LEDs, and brightness control
+- Added automatic MQTT reconnection and recovery
+
 
 ## Prerequisites
 
@@ -193,12 +199,14 @@ git clone https://github.com/jbstechguy/PrestoDeckforMA.git
 ### 4. Connect your Presto to your computer with a USB-C cable
 
 ### 5. Upload Project Files
-- Open **Thonny IDE**, and ensure the interpreter is set to **MicroPython (Raspberry Pi Pico)**.
-- In the Files window, right clicking on the root of the cloned project in the Files window and selecting 'Upload to /' to copy all the files to the Presto
+- Open **Thonny IDE** and ensure the interpreter is set to **MicroPython (Raspberry Pi Pico)**.
+- In the **Files** window, navigate to the **Raspberry Pi Pico** section (bottom-left pane). Select each file on the Presto, one at a time, right-click, and choose **Delete**.
+- Once all files have been deleted, navigate to the **This computer** section (top-left pane), browse to the cloned project folder, and open the **src** directory.
+- Inside the **src** directory, select all files and folders, right-click, and choose **Upload to /** to copy the project files to the Presto.
 
 ### 6. Store Wi-Fi and MQTT Credentials
 - In Thonny, open the `secrets.py` file.
-- Replace the placeholder WIFI credentials with your SSID and password
+- Replace the placeholder Wi-Fi credentials with your SSID and password
 - Replace the placeholder MQTT credentials with your MQTT credentials and server info.
 
 ### 7. Disable Auto Wake and/or Auto Sleep (Optional)
