@@ -19,10 +19,6 @@ This fork also adds native Home Assistant integration, allowing PrestoDeck to fu
 - Previous/Next track control
 - Shuffle control
 - Repeat control
-- Multiple display modes
-  - Mode 1 (Default): Displays album artwork with track title and artist at the bottom of the screen. Tap screen to toggle between Mode 1 and Mode 2.
-  - Mode 2: Displays playback controls, track title, and artist information. Tap screen to toggle between Mode 2 and Mode 1.
-  - Mode 3: Displays only album artwork for a clean now-playing experience. Long press to Enter Mode 3, tap to return to Mode 1.
 - Display power control
   - Auto wake when playback starts
   - Auto sleep after 5 minutes of inactivity
@@ -33,6 +29,10 @@ This fork also adds native Home Assistant integration, allowing PrestoDeck to fu
   - Remote brightness control
   - Compatible with Home Assistant automations and scenes
 - Automatic MQTT reconnection and recovery after connection loss
+- Multiple display modes
+  - Mode 1 (Default): Displays album artwork with track title and artist at the bottom of the screen. Tap screen to toggle between Mode 1 and Mode 2.
+  - Mode 2: Displays playback controls, track title, and artist information. Tap screen to toggle between Mode 2 and Mode 1.
+  - Mode 3: Displays only album artwork for a clean now-playing experience. Long press to Enter Mode 3, tap to return to Mode 1.
 
 <p align="center">
   <img src="./docs/presto3.jpg" width="220" />
