@@ -126,7 +126,7 @@ class MusicAssistant(BaseApp):
         self.mqtt = None
 
         self.clear(1)
-        self.display_text("Connecting to MQTT", (70, self.height - 80), thickness=2)
+        self.display_text("Connecting to MA", (95, self.height - 80), thickness=2)
 
         self.setup_mqtt()
         self.setup_buttons()
