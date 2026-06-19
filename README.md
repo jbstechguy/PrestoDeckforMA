@@ -278,6 +278,7 @@ if (
 - Click **Run** to launch the program, and let the beats flow!  
 
 ## Additional Resources
+- [Original PrestoDeck Project](https://github.com/fatihak/PrestoDeck)
 - [Pimoroni Presto Github Repo](https://github.com/pimoroni/presto)
 - [Getting Started with Pimoroni Presto](https://learn.pimoroni.com/article/getting-started-with-presto)
 - [Home Assistant Documentation](https://www.home-assistant.io/docs/)
