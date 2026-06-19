@@ -43,6 +43,14 @@ This fork also adds native Home Assistant integration, allowing PrestoDeck to fu
   <img src="./docs/presto5.jpg" width="220" />
 </p>
 
+<p align="center">
+  <em>
+    🎥 <a href="https://1drv.ms/v/c/4a7516bd91a697de/IQAJGoF-6F_3TJffCg0RI-RWAXN46W10rvfTC2IUkFn4tVs?e=HPrmrF">
+      Click here to watch a quick demo video
+    </a>
+  </em>
+</p>
+
 ## Prerequisites
 
 Before installing PrestoDeck for Music Assistant, ensure the following services are already configured and working:
