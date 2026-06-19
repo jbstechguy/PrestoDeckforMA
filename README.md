@@ -3,7 +3,9 @@
 
 <img src="./docs/presto.jpg" />
 
-PrestoDeck for Music Assistant is a fork of the original PrestoDeck project for the Pimoroni Presto. This is my first GitHub project and fork, so any suggestions, feedback, or contributions are greatly appreciated.
+PrestoDeck is a music controller app for the Pimoroni Presto. It displays the album cover art, name, and artist of the currently playing track and provides basic controls for playback.
+
+PrestoDeck for Music Assistant is a fork of the original PrestoDeck project. This is my first GitHub project and fork, so any suggestions, feedback, or contributions are greatly appreciated.
 
 The original project connected directly to Spotify through the Spotify Web API, displaying album artwork, track information, and playback controls for the currently playing song. Due to recent Spotify API restrictions, this fork transforms PrestoDeck into a universal Music Assistant controller powered by Home Assistant and MQTT. Instead of being limited to Spotify, it can now control any music source connected to Music Assistant, including Spotify, Plex, TIDAL, Apple Music, local libraries, and more.
 
