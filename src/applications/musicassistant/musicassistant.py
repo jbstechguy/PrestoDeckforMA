@@ -22,6 +22,7 @@ class State:
         self.show_controls = False
         self.exit = False
         self.display_on = True
+        self.brightness = 100
 
         # Display modes:
         # 1 = artwork + title/artist bottom
@@ -45,6 +46,7 @@ class State:
         state.exit = self.exit
         state.display_on = self.display_on
         state.display_mode = self.display_mode
+        state.brightness = self.brightness
         state.track = {"id": self.track["id"]} if self.track else None
         return state
 
@@ -61,6 +63,7 @@ class State:
             self.exit == other.exit and
             self.display_on == other.display_on and
             self.display_mode == other.display_mode and
+            self.brightness == other.brightness and
             (self.track or {}).get("id") == (other.track or {}).get("id")
         )
 
@@ -162,9 +165,13 @@ class MusicAssistant(BaseApp):
         self.mqtt.on_state = self.handle_musicassistant_state
         self.mqtt.on_display = self.handle_display_command
         self.mqtt.on_leds = self.handle_led_command
+        self.mqtt.on_brightness = self.handle_brightness_command
 
         try:
             self.mqtt.connect()
+            self.mqtt.publish_display_state(self.state.display_on)
+            self.mqtt.publish_led_state(self.state.toggle_leds)
+            self.mqtt.publish_brightness_state(self.state.brightness)
         except Exception as e:
             print("MQTT setup error:", e)
             self.mqtt = None
@@ -203,7 +210,7 @@ class MusicAssistant(BaseApp):
             if not self.state.display_on:
                 print("Auto wake: music started")
                 self.state.display_on = True
-                self.presto.set_backlight(1.0)
+                self.presto.set_backlight(self.state.brightness / 100)
 
                 if self.mqtt:
                     self.mqtt.publish_display_state(self.state.display_on)
@@ -218,7 +225,7 @@ class MusicAssistant(BaseApp):
 
         if state:
             print("HA Display ON")
-            self.presto.set_backlight(1.0)
+            self.presto.set_backlight(self.state.brightness / 100)
             self.state.last_active_time = time.time()
         else:
             print("HA Display OFF")
@@ -236,6 +243,19 @@ class MusicAssistant(BaseApp):
 
         if self.mqtt:
             self.mqtt.publish_led_state(self.state.toggle_leds)
+
+    def handle_brightness_command(self, brightness):
+        brightness = max(0, min(100, brightness))
+
+        self.state.brightness = brightness
+
+        print("HA Brightness:", brightness)
+
+        if self.state.display_on:
+            self.presto.set_backlight(brightness / 100)
+
+        if self.mqtt:
+            self.mqtt.publish_brightness_state(brightness)
 
     def setup_buttons(self):
         def update_controls_only(state, button):
@@ -265,7 +285,7 @@ class MusicAssistant(BaseApp):
 
             if self.state.display_on:
                 print("Display ON")
-                self.presto.set_backlight(1.0)
+                self.presto.set_backlight(self.state.brightness / 100)
                 self.state.last_active_time = time.time()
             else:
                 print("Display OFF")
@@ -359,7 +379,7 @@ class MusicAssistant(BaseApp):
             if not self.state.display_on and self.touch.state:
                 self.state.display_on = True
                 self.state.last_active_time = time.time()
-                self.presto.set_backlight(1.0)
+                self.presto.set_backlight(self.state.brightness / 100)
 
                 if self.mqtt:
                     self.mqtt.publish_display_state(self.state.display_on)
