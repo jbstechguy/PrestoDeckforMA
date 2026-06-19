@@ -20,6 +20,7 @@ class MusicAssistantMQTTClient:
         self.on_state = None
         self.on_display = None
         self.on_leds = None
+        self.on_brightness = None
 
         self.connected = False
         self.last_reconnect = 0
@@ -45,6 +46,7 @@ class MusicAssistantMQTTClient:
             self.client.subscribe(self.base_topic + "/state")
             self.client.subscribe(self.base_topic + "/ha/display/set")
             self.client.subscribe(self.base_topic + "/ha/leds/set")
+            self.client.subscribe(self.base_topic + "/ha/brightness/set")
 
             self.connected = True
 
@@ -52,6 +54,7 @@ class MusicAssistantMQTTClient:
             print("Subscribed to " + self.base_topic + "/state")
             print("Subscribed to " + self.base_topic + "/ha/display/set")
             print("Subscribed to " + self.base_topic + "/ha/leds/set")
+            self.client.subscribe(self.base_topic + "/ha/brightness/set")
 
             self.publish_discovery()
             self.publish_display_state(True)
@@ -95,6 +98,18 @@ class MusicAssistantMQTTClient:
             "device": device,
         }
 
+        brightness_config = {
+            "name": "Brightness",
+            "unique_id": self.client_id + "_brightness",
+            "command_topic": self.base_topic + "/ha/brightness/set",
+            "state_topic": self.base_topic + "/ha/brightness/state",
+            "min": 0,
+            "max": 100,
+            "step": 5,
+            "mode": "slider",
+            "device": device,
+        }
+
         try:
             self.client.publish(
                 "homeassistant/switch/" + self.client_id + "/display/config",
@@ -105,6 +120,12 @@ class MusicAssistantMQTTClient:
             self.client.publish(
                 "homeassistant/switch/" + self.client_id + "/leds/config",
                 json.dumps(leds_config),
+                retain=True
+            )
+
+            self.client.publish(
+                "homeassistant/number/" + self.client_id + "/brightness/config",
+                json.dumps(brightness_config),
                 retain=True
             )
 
@@ -134,6 +155,17 @@ class MusicAssistantMQTTClient:
                 )
             except Exception as e:
                 print("LED state publish failed:", e)
+
+    def publish_brightness_state(self, value):
+        if self.client and self.connected:
+            try:
+                self.client.publish(
+                    self.base_topic + "/ha/brightness/state",
+                    str(value),
+                    retain=True
+                )
+            except Exception as e:
+                print("Brightness state publish failed:", e)
 
     def reconnect(self):
         now = time.time()
@@ -177,6 +209,10 @@ class MusicAssistantMQTTClient:
             elif topic == self.base_topic + "/ha/leds/set":
                 if self.on_leds:
                     self.on_leds(payload == "ON")
+                    
+            elif topic == self.base_topic + "/ha/brightness/set":
+                if self.on_brightness:
+                    self.on_brightness(int(payload))
 
         except Exception as e:
             print("MQTT message error:", e)
