@@ -49,8 +49,8 @@ This fork also adds native Home Assistant integration, allowing PrestoDeck to fu
 
 ## What's Changed in This Fork?
 
-- Replaced Spotify Web API integration with Music Assistant and Home Assistant
-- Updated branding and UI colors to match Music Assistant and Home Assistant
+- Replaced Spotify Web API integration with Music Assistant
+- Updated branding and UI colors to match Music Assistant
 - Updated the existing display modes
   - Mode 1: Album artwork with track title and artist information displayed at the bottom of the screen, eliminating the unused space that previously appeared beneath the text
   - Mode 2: Playback controls with track title and artist information repositioned above the controls for improved visibility (as originally designed)
