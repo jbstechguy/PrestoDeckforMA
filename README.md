@@ -36,7 +36,12 @@ This fork also adds native Home Assistant integration, allowing PrestoDeck to fu
   - Updated accent colors from Spotify green to Home Assistant blue
 - Automatic MQTT reconnection and recovery after connection loss
 
-<img src="./docs/presto2.jpg" />      <img src="./docs/presto3.jpg" />      <img src="./docs/presto4.jpg" />      <img src="./docs/presto5.jpg" />
+<p align="center">
+  <img src="./docs/presto2.jpg" width="220" />
+  <img src="./docs/presto3.jpg" width="220" />
+  <img src="./docs/presto4.jpg" width="220" />
+  <img src="./docs/presto5.jpg" width="220" />
+</p>
 
 ## Prerequisites
 
