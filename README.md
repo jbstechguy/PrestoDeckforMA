@@ -300,5 +300,5 @@ This project is a fork of the original PrestoDeck created by AkzDev. If you enjo
 
 If you find the Music Assistant, Home Assistant, and MQTT enhancements in this fork useful, and would like to support its continued development, you can also consider supporting me.
 <p align="center">
-<a href="https://buymeacoffee.com/jbstechguy" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="35" width="auto"></a>
+<a href="https://buymeacoffee.com/jbstechdude" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="35" width="auto"></a>
 </p>
